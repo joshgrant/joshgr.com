@@ -1,0 +1,21 @@
+---
+interface Project {
+  name: string;
+  description: string;
+  href: string;
+}
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+---
+<ul class="flex flex-col">
+  {projects.map((project) => (
+    <li class="border-t border-hairline last:border-b">
+      <a href={project.href} class="group flex flex-col gap-0.5 py-3.5 text-black">
+        <span class="font-medium transition-colors group-hover:text-tint">{project.name}</span>
+        <span class="text-muted">{project.description}</span>
+      </a>
+    </li>
+  ))}
+</ul>

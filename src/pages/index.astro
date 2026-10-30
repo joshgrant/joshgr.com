@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectList from '../components/ProjectList.astro';
+import PostList from '../components/PostList.astro';
+import { Content as About } from '../about.md';
+import { site } from '../site.config.js';
+import { getPosts } from '../lib/posts.js';
+
+const featured = site.projects.filter((p) => p.featured);
+const recent = (await getPosts()).slice(0, site.homePostCount);
+---
+<Base>
+  <div class="flex flex-col gap-18">
+    <section aria-label="About" class="intro">
+      <About />
+    </section>
+
+    {featured.length > 0 && (
+      <section aria-labelledby="projects-heading">
+        <h2 id="projects-heading" class="mb-4 text-[15px] font-semibold">Projects</h2>
+        <ProjectList projects={featured} />
+      </section>
+    )}
+
+    <section aria-labelledby="writing-heading">
+      <h2 id="writing-heading" class="mb-4 text-[15px] font-semibold">Writing</h2>
+      <PostList posts={recent} />
+      <p class="mt-5"><a class="link" href="/writing/">All writing</a></p>
+    </section>
+  </div>
+</Base>

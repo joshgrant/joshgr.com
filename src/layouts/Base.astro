@@ -1,0 +1,149 @@
+---
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import { site } from '../site.config.js';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Wider content column, for tools like Wizardly Words. */
+  wide?: boolean;
+}
+
+const { title, description = site.description, wide = false } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : site.name;
+const path = Astro.url.pathname;
+
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const elsewhere = [...site.elsewhere, { label: 'RSS feed', href: '/rss.xml' }];
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={site.name} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(path, Astro.site)} />
+  </head>
+  <body class="bg-white font-sans text-black">
+    <div class="mx-auto max-w-[1040px] px-[clamp(20px,5vw,48px)]">
+      <header class="flex items-center justify-between gap-4 pt-10 pb-6">
+        <a href="/" class="flex min-h-11 items-center gap-3 text-black">
+          <Logo />
+          <span class="font-semibold tracking-[-0.01em]">{site.name}</span>
+        </a>
+        <button
+          id="menu-button"
+          type="button"
+          class="group -mr-2.5 inline-flex size-11 cursor-pointer items-center justify-center rounded-[10px] text-black transition-colors hover:text-tint md:hidden"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+          aria-label="Open menu"
+        >
+          <svg class="group-aria-expanded:hidden" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 8h16M3 14h16"></path></svg>
+          <svg class="hidden group-aria-expanded:block" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 5l12 12M17 5L5 17"></path></svg>
+        </button>
+      </header>
+
+      <nav id="mobile-menu" aria-label="Menu" class="pt-1 pb-8 md:hidden" hidden>
+        <ul class="flex flex-col">
+          {site.nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                class:list={[
+                  'flex min-h-13 items-center text-2xl font-medium tracking-[-0.015em] transition-colors',
+                  isCurrent(item.href) ? 'text-black' : 'text-muted hover:text-tint',
+                ]}
+              >{item.label}</a>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-7 text-sm text-muted">Elsewhere</p>
+        <ul class="flex flex-wrap gap-x-6">
+          {elsewhere.map((item) => (
+            <li><a href={item.href} class="flex min-h-11 items-center text-muted transition-colors hover:text-tint">{item.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <hr class="border-0 h-px bg-rule" />
+
+      <div class="pt-16 pb-24 md:flex md:gap-18">
+        <nav aria-label="Site" class="hidden w-[200px] shrink-0 flex-col gap-8 md:flex">
+          <ul class="flex flex-col">
+            {site.nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isCurrent(item.href) ? 'page' : undefined}
+                  class:list={[
+                    'flex min-h-10 items-center transition-colors',
+                    isCurrent(item.href) ? 'font-medium text-black' : 'text-muted hover:text-tint',
+                  ]}
+                >{item.label}</a>
+              </li>
+            ))}
+          </ul>
+          <div class="flex flex-col gap-1">
+            <p class="text-sm text-muted">Elsewhere</p>
+            <ul class="flex flex-col">
+              {elsewhere.map((item) => (
+                <li><a href={item.href} class="flex min-h-10 items-center text-muted transition-colors hover:text-tint">{item.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+
+        <main class:list={['min-w-0 flex-1', wide ? 'max-w-[760px]' : 'max-w-[620px]']}>
+          <slot />
+        </main>
+      </div>
+
+      <hr class="border-0 h-px bg-rule" />
+
+      <footer class="flex flex-wrap items-center justify-between gap-4 pt-7 pb-12">
+        <p class="text-[15px] text-muted">© {year} {site.name}</p>
+        <a
+          href={`mailto:${site.email}`}
+          class="inline-flex min-h-11 items-center text-[15px] font-medium text-tint underline decoration-tint decoration-1 underline-offset-4 transition-colors hover:text-tint-deep hover:decoration-tint-deep hover:decoration-2"
+        >Contact me</a>
+      </footer>
+    </div>
+
+    <script>
+      const button = document.getElementById('menu-button');
+      const menu = document.getElementById('mobile-menu');
+
+      function setOpen(open: boolean) {
+        if (!button || !menu) return;
+        button.setAttribute('aria-expanded', String(open));
+        button.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        menu.hidden = !open;
+      }
+
+      button?.addEventListener('click', () => {
+        setOpen(button.getAttribute('aria-expanded') !== 'true');
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && button?.getAttribute('aria-expanded') === 'true') {
+          setOpen(false);
+          button.focus();
+        }
+      });
+    </script>
+  </body>
+</html>

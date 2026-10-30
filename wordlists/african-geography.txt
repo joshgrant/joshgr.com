@@ -1,0 +1,533 @@
+Ahaggar
+Belezma
+Chrea
+Djebel Aissa
+Djurdjura
+El Kala
+Gouraya
+Tassili n'Ajjer
+Taza
+Theniet El Had
+Tlemcen
+Bicauri
+Cameia
+Cangandala
+Iona
+Longa-Mavinga
+Luengue-Luiana
+Mupa
+Quiçama
+Pendjari
+Chobe
+Kgalagadi
+Makgadikgadi Pans
+Nxai Pan
+Arli
+Deux Balés
+Kaboré Tambi
+Kibira
+Risizi
+Ruvubu
+Bénoué
+Bouba Njida
+Boumba Bek
+Campo Ma'an
+Faro
+Korup
+Lobéké
+Nki
+Waza
+Fogo
+André Félix
+Bamingui-Bangoran
+Dzanga-Ndoki
+Mbaéré Bodingué
+Floris
+Aouk
+Goz Beïda
+Manda
+Zakouma
+Coelacanth
+Karthala
+Mitsamiouli Ndroude
+Mohéli
+Mount Ntringui
+Shisiwani
+Garamba
+Kahuzi-Biéga
+Kundelungu
+Lomami
+Maiko
+Mangroves
+Okapi
+Salonga
+Upemba
+Virunga
+Conkouati-Douli
+Nouabalé-Ndoki
+Ntokou-Pikounda
+Odzala-Kokoua
+Ougoue Lekiti
+Assagny
+Banco
+Comoé
+Îles Ehotilés
+Marahoué
+Mont Nimba
+Mont Péko
+Mont Sângbé
+Taï
+Day
+Djibouti
+Yoboki
+Gabal Elba
+Burullus
+Nabq Protected Area
+Ras Muhammad
+Saint Katherine
+Sannur Cave
+Siwa Oasis
+Wadi Allaqi
+Wadi El Gamal
+White Desert
+Gilf Kebir
+Monte Alen
+Dahlak
+Semenawi Bahri
+Abidjatta-Shalla
+Awash
+Bale
+Gambela
+Mago
+Nechisar
+Omo
+Simien
+Yangudi Rassa
+Akanda
+Batéké Plateau
+Birougou
+Crystal
+Ivindo
+Loango
+Lopé
+Mayumba
+Minkébé
+Moukalaba-Doudau
+Mwangné
+Pongara
+Waka
+Abuko
+Bijilo
+Kiang
+Niumi
+River Gambia
+Bia
+Bui
+Digya
+Kakum
+Kalakpa
+Mole
+Nini-Suhien
+Badiar
+Cacheu River
+João Vieira
+Orangos
+Aberdare
+Amboseli
+Arabuko Sokoke
+Central
+Chyulu Hills
+Hell's Gate
+Kisite-Mpunguti
+Nakuru
+Malindi
+Malka Mari
+Marsabit
+Meru
+Mombasa
+Mount Elgon
+Mount Kenya
+Mount Longonot
+Nairobi
+Ol Donyo Sabuk
+Ruma
+Saiwa Swamp
+Samburu
+Sibiloi
+Tsavo East
+Tsavo West
+Watamu
+Sehlabathebe
+Ts'ehlanyane
+Sapo
+Gola Forest
+Kpo
+Grand Kru-River Gee
+Bong 
+Foya
+Gbi
+Nimba West
+Abughilan
+El-Kouf
+Karabolli
+El Naggaza
+Rajma
+Sirman
+Amber 
+Andohahela
+Andringitra
+Ankarafantsika
+Baie de Baly
+Isalo
+Kirindy Mitea
+Mantadia
+Marojejy
+Masoala
+Midongy du sud
+Ranomafana
+Tsimanampetsotse
+Sahamalaza
+Zahamena
+Zombitse-Vohibasia
+Kasungu
+Malawi
+Lengwe
+Liwonde
+Nyika
+Bafing
+Boucle du Baoulé
+Kouroufing
+Wongo
+Banc d'Arguin
+Diawling
+Black River
+Bras d'Eau
+Islets
+Al Hoceima
+Gulf of Khnifiss
+Haut Atlas Oriental
+Ifrane
+Iriqui
+Khenifra
+Merdja Zerga
+Souss-Massa
+Talassemtane
+Tazekka
+Toubkal
+Banhine
+Bazaruto
+Gorongosa
+Limpopo
+Magoe
+Quirimbas
+Zinave
+Bwabwata
+Dorob
+Etosha
+Hardap
+Mangetti
+Mudumu
+Nkasa Rupara
+Namib-Naukluft
+Skeleton Coast
+Waterberg
+Chad Basin
+Cross River
+Gashaka-Gumti
+Kainji
+Kamuku
+Okomu
+Old Oyo
+Yankari
+Akagera
+Gishwati
+Nyungwe
+Volcans
+Obo
+Basse Casamance
+Isles des Madeleines
+Langue de Barbarie
+Djoudj
+Niokolo-Koba
+Saloum
+Curieuse
+Morne Seychellois
+Praslin
+Gola
+Outamba-Kilimi
+Daallo 
+Hargeisa
+Hobyo
+Jilib
+Kismayo
+Lag Badana
+Addo Elephant
+Agulhas
+Augrabies
+Bontebok
+Camdeboo
+Karoo
+Kgalagadi
+Knysna
+Kruger
+Mapungubwe
+Marakele
+Mokala
+Zebra
+Namaqua
+Royal Natal
+Table 
+Tankwa Karoo
+Tsitsikamma
+Bandingilo
+Boma
+Nimule
+Dinder
+Lantoto
+Radom
+Suakin
+Hlane Royal
+Arusha
+Gombe
+Jozani Chwaka
+Katavi
+Kilimanjaro
+Kitulo
+Manyara
+Mafia
+Mahale
+Mikumi
+Mnazi Ruvumba
+Ruaha
+Rubondo
+Saadani
+Serengeti
+Tarangire
+Udzungwa
+Fazao-Malfakassa
+Fosse aux Lions
+Kéran
+Bou-Hedma
+Boukornine
+Chaambi
+El Feidja
+Ichkeul
+Jebil
+Sidi Toui
+Zembra
+Bwindi
+Kibale
+Kidepo
+Mburo
+Mgahinga
+Mount Elgon
+Murchison
+Queen Elizabeth
+Rwenzori
+Semuliki
+Blue Lagoon
+Isangano
+Kafue
+Kasanka
+Lavushi Manda
+Liuwa Plain
+Lochinvar
+Lower Zambezi
+Luambe
+Lukusuzi
+Lusenga Plain
+Mosi-oa-Tunya
+Mweru Wantipa
+North Luangwa
+Nsumbu
+Sioma Ngwezi
+South Luangwa
+West Lunga
+Lusaka
+Chimanimani
+Chizarira
+Gonarezhou
+Hwange
+Kazuma Pan
+Mana Pools
+Matobo
+Matusadona
+Nyanga
+Victoria
+Zambezi
+Algeria
+Angola
+Benin
+Botswana
+Burkina Faso
+Burundi
+Cabo Verde
+Cameroon
+Chad
+Comoros
+Congo
+Cote d’Ivoire
+Djibouti
+Egypt
+Equatorial Guinea
+Eritrea
+Eswatini
+Ethiopia
+Gabon
+Gambia
+Ghana
+Guinea
+Guinea-Bissau
+Kenya
+Lesotho
+Liberia
+Libya
+Madagascar
+Malawi
+Mali
+Mauritania
+Mauritius
+Morocco
+Mozambique
+Namibia
+Niger
+Nigeria
+Rwanda
+Sao Tome and Principe
+Senegal
+Seychelles
+Sierra Leone
+Somalia
+South Africa
+South Sudan
+Sudan
+Tanzania
+Togo
+Tunisia
+Uganda
+Zambia
+Zimbabwe
+Cuanza
+Great Fish
+Great Kei
+Black Kei
+White Kei
+Groot
+Gamtoos
+Ihosy
+Jukskei
+Kafue
+Kowie
+Kuiseb
+Kunene
+Kwando
+Limpopo
+Luangwa
+Mania
+Maputo
+Molopo
+Mooi
+Mthatha
+Okavango
+Onilahy
+Orange
+Caledon
+Vaal
+Fish
+Shangani
+Swakop
+Tugela
+Umfolozi
+Black Umfolozi
+White Umfolozi
+Umgeni
+Umkomazi
+Zambezi
+Gairezi
+Chari
+Logone
+Kagera
+Congo
+Ebola
+Kasai
+Kwango
+Sankuru
+Lualaba
+Lomami
+Ubangi
+Lulonga
+Lopori
+Maringa
+Tshuapa
+Uele
+Nyabarongo
+Rurubu
+Ruzizi
+Mbomou
+Wouri
+Xufexufe
+Tan
+Athi
+Mara
+Ewaso
+Sondu
+Ruvuma
+Rufiji
+Ruvu
+Shebelle
+Jubba
+Nile
+Sezzibwa
+Aba
+Bandama
+Benue
+Cavalla
+Gambia
+Kolenté
+Kaba
+Moa
+Niger
+Oba
+Ose
+Osun
+Oteghelli
+Oueme
+Rokel
+Saint Paul
+Sanaga
+Sankarani
+Senegal
+Sewa
+Volta
+Cross
+Nuon
+Cestos
+Nile
+Atbarah
+Blue Nile
+Didessa
+Nile
+Bahr el Zeraf
+White Nile
+White Nile
+Bou Regreg
+Draa
+Moulouya
+Oum
+Sebou
+Chelif
+Chad
+Mai-Ndombe
+Turkana
+Malawi
+Albert
+Tanganyika
+Ngami
+Mweru
+Edward
+Bangweulu
+Victoria
+Abaya
+Kivu
+Tana
+Naivasha

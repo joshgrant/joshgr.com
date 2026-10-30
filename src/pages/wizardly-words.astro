@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+import { WORD_LISTS } from '../lib/wordlists.js';
+
+const field = 'flex min-h-14 items-center justify-between gap-4 border-t border-hairline';
+const stepButton =
+  'inline-flex size-11 cursor-pointer items-center justify-center rounded-[10px] text-black transition-colors enabled:hover:text-tint disabled:cursor-default disabled:text-faint';
+const steppers = [
+  { key: 'count', label: 'Number of words', less: 'Fewer words', more: 'More words' },
+  { key: 'minLength', label: 'Min length', less: 'Shorter minimum', more: 'Longer minimum' },
+  { key: 'maxLength', label: 'Max length', less: 'Shorter maximum', more: 'Longer maximum' },
+];
+---
+<Base title="Wizardly Words" description="Invents new words that sound real, trained on any word list." wide>
+  <div class="flex flex-col gap-10">
+    <div class="flex max-w-[620px] flex-col gap-4">
+      <h1 class="text-[40px] leading-[1.12] font-semibold tracking-[-0.028em]">Wizardly Words</h1>
+      <p>Invents new words that sound real. Pick a word list, or open a text file of your own. Your file is read on your device and never uploaded.</p>
+    </div>
+
+    <noscript><p>Wizardly Words needs JavaScript to run.</p></noscript>
+
+    <div class="flex flex-wrap items-start gap-x-14 gap-y-10">
+      <form id="ww-form" aria-label="Word settings" class="flex max-w-[360px] min-w-0 flex-[1_1_300px] flex-col gap-7">
+        <div class="flex flex-col border-b border-hairline">
+          <div class={field}>
+            <label for="ww-source">Word list</label>
+            <span class="relative inline-flex items-center text-black hover:text-tint">
+              <select id="ww-source" class="min-h-11 cursor-pointer appearance-none rounded-lg bg-transparent py-2.5 pr-6.5 pl-2 text-right text-base disabled:cursor-default disabled:text-muted">
+                {WORD_LISTS.map((list, i) => <option value={list.id} selected={i === 0}>{list.name}</option>)}
+              </select>
+              <svg class="pointer-events-none absolute right-1.5" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5l3 3 3-3"></path></svg>
+            </span>
+          </div>
+
+          <div id="ww-file-empty" class={field}>
+            <span class="text-muted">Or use your own list</span>
+            <span class="relative inline-flex has-focus-visible:rounded-md has-focus-visible:outline-2 has-focus-visible:outline-offset-3 has-focus-visible:outline-tint">
+              <input id="ww-file" class="sr-only" type="file" accept=".txt,.csv,.md,.text,text/plain" />
+              <label for="ww-file" class="link inline-flex min-h-11 cursor-pointer items-center">Open file…</label>
+            </span>
+          </div>
+
+          <div id="ww-file-loaded" class={field} hidden>
+            <span class="flex min-w-0 flex-col py-2 leading-[1.35]">
+              <span id="ww-file-name" class="truncate"></span>
+              <span id="ww-file-info" class="text-sm text-muted"></span>
+            </span>
+            <button id="ww-file-clear" type="button" class="link min-h-11 cursor-pointer">Clear</button>
+          </div>
+
+          <div class={field}>
+            <span id="ww-cohesion-label">Cohesion</span>
+            <div role="group" aria-labelledby="ww-cohesion-label" class="-mr-2.5 flex items-center">
+              <button type="button" class={stepButton} data-step="cohesion" data-delta="-1" aria-label="Less cohesion"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 9h10"></path></svg></button>
+              <output data-value="cohesion" aria-live="polite" class="min-w-6 text-center tabular-nums"></output>
+              <button type="button" class={stepButton} data-step="cohesion" data-delta="1" aria-label="More cohesion"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M9 4v10M4 9h10"></path></svg></button>
+            </div>
+          </div>
+          <p class="mb-4 text-sm leading-normal text-muted">Higher cohesion makes more realistic words, but the model takes longer to load.</p>
+        </div>
+
+        <div class="flex flex-col border-b border-hairline">
+          {steppers.map((s) => (
+            <div class={field}>
+              <span id={`ww-${s.key}-label`}>{s.label}</span>
+              <div role="group" aria-labelledby={`ww-${s.key}-label`} class="-mr-2.5 flex items-center">
+                <button type="button" class={stepButton} data-step={s.key} data-delta="-1" aria-label={s.less}><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 9h10"></path></svg></button>
+                <output data-value={s.key} aria-live="polite" class="min-w-6 text-center tabular-nums"></output>
+                <button type="button" class={stepButton} data-step={s.key} data-delta="1" aria-label={s.more}><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M9 4v10M4 9h10"></path></svg></button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="flex flex-col border-b border-hairline">
+          <div class={field}>
+            <label for="ww-prefix">Prefix</label>
+            <input id="ww-prefix" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Optional" class="min-h-11 w-full max-w-[200px] bg-transparent text-right text-base outline-none placeholder:text-[#8a8a8a]" />
+          </div>
+        </div>
+
+        <div>
+          <button id="ww-generate" type="submit" class="min-h-12 cursor-pointer rounded-full bg-black px-7 text-base font-medium text-white transition-colors enabled:hover:bg-tint disabled:cursor-default disabled:bg-rule disabled:text-muted">Generate</button>
+        </div>
+      </form>
+
+      <section aria-label="Generated words" aria-live="polite" class="min-w-0 flex-[999_1_280px] border-t border-hairline pt-3">
+        <div id="ww-building" class="flex min-h-11 items-center gap-3 text-muted" hidden>
+          <span class="size-4 animate-spin rounded-full border-2 border-[#e3e3e3] border-t-black" aria-hidden="true"></span>
+          <span>Loading model…</span>
+        </div>
+
+        <p id="ww-error" class="mt-2.5 max-w-[34ch]" hidden></p>
+
+        <div id="ww-empty" class="flex flex-col gap-3 pt-2.5 text-muted">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 23L17 11"></path><path d="M19 4v4M17 6h4M23 11v3M21.5 12.5h3M12 5v2M11 6h2"></path></svg>
+          <p>Press Generate to make some words.</p>
+        </div>
+
+        <div id="ww-results" hidden>
+          <div class="flex min-h-11 items-center justify-between gap-4">
+            <span id="ww-result-count" class="text-sm text-muted"></span>
+            <button id="ww-copy" type="button" class="link min-h-11 cursor-pointer text-sm">Copy all</button>
+          </div>
+          <ul id="ww-words" class="mt-2 flex flex-col gap-0.5"></ul>
+        </div>
+      </section>
+    </div>
+
+    <p class="text-[15px] text-muted">Curious how it works? Read <a class="link" href="/writing/how-wizardly-words-invents-words/">How Wizardly Words invents words</a>.</p>
+  </div>
+</Base>
+
+<script>
+  import { start } from '../scripts/wizardly.js';
+  start();
+</script>

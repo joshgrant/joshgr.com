@@ -1,0 +1,27 @@
+{
+  "name": "josh-grant-site",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "models": "node scripts/build-models.mjs",
+    "dev": "npm run models && astro dev",
+    "build": "npm run models && astro build",
+    "preview": "astro preview",
+    "new": "node scripts/new-post.mjs",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "@tailwindcss/typography": "0.5.20",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.3.8",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.0"
+  }
+}

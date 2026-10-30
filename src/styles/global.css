@@ -1,0 +1,237 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+  Design tokens. Use them in markup as Tailwind classes:
+  text-tint, bg-wash, border-hairline, text-muted, and so on.
+  Change the tint here and every hover, focus ring and selection follows.
+*/
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --color-tint: #00873d;       /* luminous forest green, only on interaction */
+  --color-tint-deep: #00662e;  /* hover state for green text */
+  --color-muted: #6b6b6b;      /* secondary text, passes contrast on white */
+  --color-faint: #c4c4c4;      /* disabled controls */
+  --color-rule: #e8e8e8;       /* header and footer dividers */
+  --color-hairline: #efefef;   /* list and form separators */
+  --color-wash: #f5f5f5;       /* code blocks, image placeholders */
+}
+
+@layer base {
+  html {
+    background: #ffffff;
+    color: #000000;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  ::selection {
+    background: var(--color-tint);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-tint);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
+
+/* An inline text link: black with a quiet underline that turns green on hover. */
+@utility link {
+  color: #000000;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: #cccccc;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+  &:hover {
+    color: var(--color-tint);
+    text-decoration-color: var(--color-tint);
+  }
+}
+
+@layer components {
+
+  /* The homepage introduction (src/about.md). The first paragraph is the large lead. */
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .intro p {
+    margin: 0;
+  }
+  .intro > p:first-child {
+    font-size: 26px;
+    line-height: 1.38;
+    letter-spacing: -0.018em;
+  }
+  .intro a {
+    @apply link;
+  }
+}
+
+/*
+  Markdown posts. Every Markdown style is tuned here.
+  These rules sit outside any layer so they win over the Typography plugin's defaults.
+*/
+.prose {
+  --tw-prose-body: #000000;
+  --tw-prose-headings: #000000;
+  --tw-prose-lead: #000000;
+  --tw-prose-links: #000000;
+  --tw-prose-bold: #000000;
+  --tw-prose-counters: var(--color-muted);
+  --tw-prose-bullets: #000000;
+  --tw-prose-hr: var(--color-rule);
+  --tw-prose-quotes: #000000;
+  --tw-prose-quote-borders: transparent;
+  --tw-prose-captions: var(--color-muted);
+  --tw-prose-kbd: #000000;
+  --tw-prose-code: #000000;
+  --tw-prose-pre-code: #000000;
+  --tw-prose-pre-bg: var(--color-wash);
+  --tw-prose-th-borders: #000000;
+  --tw-prose-td-borders: var(--color-hairline);
+  font-size: 17px;
+  line-height: 1.6;
+  max-width: none;
+}
+
+.prose :where(a):not(:where(.not-prose *)) {
+  @apply link;
+  font-weight: inherit;
+}
+
+.prose :where(h2):not(:where(.not-prose *)) {
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+}
+.prose :where(h3):not(:where(.not-prose *)) {
+  font-size: 19px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-top: 1.6em;
+  margin-bottom: 0.5em;
+}
+.prose :where(h4):not(:where(.not-prose *)) {
+  font-size: 17px;
+  font-weight: 600;
+}
+.prose :where(strong):not(:where(.not-prose *)) {
+  font-weight: 600;
+}
+
+.prose :where(blockquote):not(:where(.not-prose *)) {
+  border: 0;
+  padding-left: 28px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+}
+.prose :where(blockquote p:first-of-type):not(:where(.not-prose *))::before,
+.prose :where(blockquote p:last-of-type):not(:where(.not-prose *))::after {
+  content: none;
+}
+
+.prose :where(code):not(:where(pre *, .not-prose *)) {
+  font-size: 0.86em;
+  font-weight: 400;
+  background: #f3f3f3;
+  border-radius: 5px;
+  padding: 0.12em 0.38em;
+}
+.prose :where(code):not(:where(.not-prose *))::before,
+.prose :where(code):not(:where(.not-prose *))::after {
+  content: none;
+}
+.prose :where(pre):not(:where(.not-prose *)) {
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.prose :where(table):not(:where(.not-prose *)) {
+  display: block;
+  overflow-x: auto;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+.prose :where(thead th):not(:where(.not-prose *)) {
+  font-weight: 600;
+}
+
+.prose :where(img):not(:where(.not-prose *)) {
+  border-radius: 12px;
+}
+.prose :where(figcaption):not(:where(.not-prose *)) {
+  font-size: 14px;
+}
+
+.prose :where(hr):not(:where(.not-prose *)) {
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+}
+
+/* GitHub-style task lists: - [ ] and - [x] */
+.prose :where(ul.contains-task-list):not(:where(.not-prose *)) {
+  list-style: none;
+  padding-left: 0;
+}
+.prose :where(li.task-list-item):not(:where(.not-prose *)) {
+  padding-left: 0;
+}
+.prose input[type="checkbox"] {
+  accent-color: #000000;
+  width: 16px;
+  height: 16px;
+  margin: 0 10px 0 0;
+  vertical-align: -2px;
+}
+
+/* Footnotes: [^1] */
+.prose .footnotes {
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 1px solid var(--color-rule);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+.prose .footnotes ol {
+  margin-top: 0;
+}
+.prose .footnotes a,
+.prose :where(sup a):not(:where(.not-prose *)) {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.prose .footnotes a:hover,
+.prose :where(sup a):not(:where(.not-prose *)):hover {
+  color: var(--color-tint);
+}

@@ -1,0 +1,10 @@
+// Cloudflare deployment settings. The site is fully static: Cloudflare just
+// serves the files Astro builds into ./dist. No server code runs.
+{
+  "name": "josh-grant-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
