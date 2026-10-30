@@ -47,7 +47,7 @@ export const site = {
     },
     {
       name: 'MusicX',
-      description: 'What does the musical countryside look like?',
+      description: 'What does the musical desert look like?',
       href: 'https://github.com/joshgrant/MusicX',
       featured: true,
     },
