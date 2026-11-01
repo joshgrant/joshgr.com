@@ -1,0 +1,4 @@
+# Joshternet declaration (RFC-JOSH-0002). The file has no extension, so tell
+# Cloudflare to serve it as JSON.
+/.well-known/josh
+  Content-Type: application/json

@@ -114,11 +114,15 @@ const year = new Date().getFullYear();
 
       <hr class="border-0 h-px bg-rule" />
 
-      <footer class="flex flex-wrap items-center justify-between gap-4 pt-7 pb-12">
+      <footer class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 pt-7 pb-12">
         <p class="text-[15px] text-muted">© {year} {site.name}</p>
+        <!-- Joshternet button. The script draws it right after itself, and draws nothing if the registry can't be reached. -->
+        <div class="flex h-[31px] w-[88px] items-center [&_svg]:block">
+          <script is:inline async src="https://joshternet.org/embed/joshternet-button.js"></script>
+        </div>
         <a
           href={`mailto:${site.email}`}
-          class="inline-flex min-h-11 items-center text-[15px] font-medium text-tint underline decoration-tint decoration-1 underline-offset-4 transition-colors hover:text-tint-deep hover:decoration-tint-deep hover:decoration-2"
+          class="inline-flex min-h-11 items-center justify-self-end text-[15px] font-medium text-tint underline decoration-tint decoration-1 underline-offset-4 transition-colors hover:text-tint-deep hover:decoration-tint-deep hover:decoration-2"
         >Contact me</a>
       </footer>
     </div>
