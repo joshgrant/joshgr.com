@@ -18,7 +18,7 @@ export const site = {
     { label: 'Home', href: '/' },
     { label: 'Writing', href: '/writing/' },
     { label: 'Projects', href: '/projects/' },
-    { label: 'Wizardly Words', href: '/wizardly-words/' },
+    { label: 'Photos', href: '/photos/' },
   ],
 
   // Shown under "Elsewhere" in the side menu. Add, remove or reorder freely.

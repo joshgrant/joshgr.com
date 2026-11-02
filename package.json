@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "models": "node scripts/build-models.mjs",
-    "dev": "npm run models && astro dev",
-    "build": "npm run models && astro build",
+    "photos": "node scripts/build-photos.mjs",
+    "grain": "node scripts/build-grain.mjs",
+    "dev": "npm run models && npm run photos && astro dev",
+    "build": "npm run models && npm run photos && astro build",
     "preview": "astro preview",
     "new": "node scripts/new-post.mjs",
     "deploy": "npm run build && wrangler deploy"
@@ -19,6 +21,7 @@
     "@tailwindcss/typography": "0.5.20",
     "@tailwindcss/vite": "4.3.3",
     "astro": "7.3.8",
+    "sharp": "0.35.5",
     "tailwindcss": "4.3.3"
   },
   "devDependencies": {

@@ -54,6 +54,25 @@ For images, put the file in `public/images/` and reference it as `![Description 
 
 Edit the `projects` list in `src/site.config.js`. Projects marked `featured: true` show on the homepage; all of them show on `/projects/`.
 
+## Photos
+
+Put photos in `photos/` (JPEG, PNG, WebP, AVIF or TIFF; export HEIC from Photos as JPEG first). They show on `/photos/` in file-name order, so prefix names with numbers (`01-`, `02-`…) to choose the order. Photos should be square; anything else is cropped to its center square.
+
+To give a photo alt text, add `photos/captions.json`, keyed by file name without the extension:
+
+```json
+{ "01-harbor": "Fishing boats in the harbor at dawn" }
+```
+
+Before every `dev` and `build`, `scripts/build-photos.mjs` prepares them:
+
+- It **removes all metadata from your originals in `photos/`**, in place: EXIF (camera, settings, date), GPS location, XMP, IPTC, comments, and the hidden extra images iPhones attach. JPEGs and PNGs are cleaned without re-compressing. Other formats, and photos that rely on a rotation tag, are re-saved once as high-quality JPEGs.
+- It writes a grid image and a 2400px preview of each photo to `public/photos/`, named by a hash so not even the file name is published, and stops the build if any of them still contains metadata.
+
+**Run `npm run dev` (or `npm run photos`) after adding photos and before committing them** (restart `dev` if it was already running). The originals are committed to Git, and they're only scrubbed when the script runs. A photo committed before that keeps its metadata in the repository's history.
+
+The film grain is drawn over the photos in the browser, so downloaded photos are clean. The grain texture is `public/grain.webp`. To change its character, edit the settings at the top of `scripts/build-grain.mjs` and run `npm run grain`. To change how strongly it shows, change the `opacity` of `.grain::after` in `src/pages/photos.astro`.
+
 ## Wizardly Words
 
 The page is `src/pages/wizardly-words.astro`, and its behavior is in `src/scripts/wizardly.js`. The word model itself (ported from SmallCharacterModel) is `src/lib/wordmodel.js`.
@@ -90,14 +109,15 @@ src/
   site.config.js        Your name, links, projects
   about.md              Homepage introduction
   content/posts/        Blog posts (Markdown)
-  pages/                One file per page (index, writing, projects, wizardly-words, 404, rss)
+  pages/                One file per page (index, writing, projects, photos, wizardly-words, 404, rss)
   layouts/Base.astro    Header, menus and footer shared by every page
   components/           Logo, project list, post list
   styles/global.css     Design tokens and Markdown styling
   lib/                  Post helpers, word model, word list registry
   scripts/wizardly.js   Wizardly Words page behavior
-scripts/                Model builder and "new post" helper
+scripts/                Model builder, photo and grain builders, "new post" helper
+photos/                 Your photos (metadata is stripped automatically)
 wordlists/              Source word lists for Wizardly Words
-public/                 Files served as-is (favicon, images)
+public/                 Files served as-is (favicon, images, grain texture)
 wrangler.jsonc          Cloudflare settings
 ```

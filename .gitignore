@@ -5,3 +5,4 @@ dist/
 public/models/
 .DS_Store
 .env
+public/photos/
