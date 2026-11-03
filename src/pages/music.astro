@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+
+// The Apple Music embed link (Share → Embed Album). Swap it to show a different album.
+const albumUrl = 'https://embed.music.apple.com/fr/album/submerged/6799179187?l=en-GB';
+---
+<Base title="Music">
+  <h1 class="mb-8 text-[40px] leading-[1.12] font-semibold tracking-[-0.028em]">Music</h1>
+  <hr class="h-px border-0 bg-hairline" />
+
+  <!-- The wash shows while Apple's player loads, so the space never flashes or jumps. -->
+  <div class="mt-8 max-w-[660px] overflow-hidden rounded-[12px] bg-wash">
+    <iframe
+      title="Submerged on Apple Music"
+      src={albumUrl}
+      height="450"
+      loading="lazy"
+      class="block w-full border-0 bg-transparent"
+      allow="autoplay *; encrypted-media *;"
+      sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+    ></iframe>
+  </div>
+</Base>

@@ -16,8 +16,8 @@ const recent = (await getPosts()).slice(0, site.homePostCount);
     </section>
 
     {featured.length > 0 && (
-      <section aria-labelledby="projects-heading">
-        <h2 id="projects-heading" class="mb-4 text-[15px] font-semibold">Projects</h2>
+      <section aria-labelledby="software-heading">
+        <h2 id="software-heading" class="mb-4 text-[15px] font-semibold">Software</h2>
         <ProjectList projects={featured} />
       </section>
     )}

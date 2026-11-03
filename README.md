@@ -50,9 +50,13 @@ Every Markdown style is supported and styled, including headings, bold and itali
 
 For images, put the file in `public/images/` and reference it as `![Description of the image](/images/photo.jpg)`.
 
-## Projects
+## Software
 
-Edit the `projects` list in `src/site.config.js`. Projects marked `featured: true` show on the homepage; all of them show on `/projects/`.
+Edit the `projects` list in `src/site.config.js`. Projects marked `featured: true` show on the homepage; all of them show on `/software/` (the old `/projects/` address redirects there).
+
+## Music
+
+The album on `/music/` is set by `albumUrl` at the top of `src/pages/music.astro`. To show a different album, copy its embed link from Apple Music (Share → Embed Album) and paste the `src` there.
 
 ## Photos
 
@@ -109,7 +113,7 @@ src/
   site.config.js        Your name, links, projects
   about.md              Homepage introduction
   content/posts/        Blog posts (Markdown)
-  pages/                One file per page (index, writing, projects, photos, wizardly-words, 404, rss)
+  pages/                One file per page (index, writing, software, photos, music, wizardly-words, 404, rss)
   layouts/Base.astro    Header, menus and footer shared by every page
   components/           Logo, project list, post list
   styles/global.css     Design tokens and Markdown styling

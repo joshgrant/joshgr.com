@@ -6,6 +6,10 @@ import { site } from './src/site.config.js';
 export default defineConfig({
   site: site.url,
   integrations: [sitemap()],
+  // Old addresses that moved, so existing links keep working.
+  redirects: {
+    '/projects': '/software/',
+  },
   vite: {
     plugins: [tailwindcss()],
   },

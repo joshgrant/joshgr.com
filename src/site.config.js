@@ -17,8 +17,9 @@ export const site = {
   nav: [
     { label: 'Home', href: '/' },
     { label: 'Writing', href: '/writing/' },
-    { label: 'Projects', href: '/projects/' },
+    { label: 'Software', href: '/software/' },
     { label: 'Photos', href: '/photos/' },
+    { label: 'Music', href: '/music/' },
   ],
 
   // Shown under "Elsewhere" in the side menu. Add, remove or reorder freely.
