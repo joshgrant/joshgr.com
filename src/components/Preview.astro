@@ -1,0 +1,207 @@
+---
+// The full-window image preview used by Photos and Graphics. Opens from any
+// button with `data-preview`, which describes the image:
+//   data-full, data-thumb, data-alt  the large image, the image already on the
+//                                    page (shown while the large one loads), alt text
+//   data-width, data-height          the large image's size in pixels
+//   data-grain                       draw film grain over it (photos)
+//   data-native="css"                cap at one image pixel per CSS pixel rather than
+//                                    per screen pixel, so small images aren't tiny on
+//                                    high-density screens (graphics)
+//   data-radius                      corner radius in CSS pixels (graphics)
+---
+<dialog id="preview" class="preview" aria-label="Image preview" tabindex="-1">
+  <div class="preview-frame">
+    <img id="preview-image" alt="" />
+  </div>
+</dialog>
+
+<style>
+  .preview {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-out;
+    outline: none;
+  }
+
+  .preview[open] {
+    display: block;
+    animation: fade-in 200ms ease-out;
+  }
+
+  .preview::backdrop {
+    background: rgb(0 0 0 / 0.82);
+  }
+
+  .preview[open]::backdrop {
+    animation: fade-in 220ms ease-out;
+  }
+
+  .preview.closing {
+    animation: fade-out 160ms ease-in forwards;
+  }
+
+  .preview.closing::backdrop {
+    animation: fade-out 160ms ease-in forwards;
+  }
+
+  /* Sized and placed on whole screen pixels by the script below, so the image
+     and its grain are never resampled. Fades only, for the same reason. */
+  .preview-frame {
+    position: absolute;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--thumb) center / cover no-repeat;
+  }
+
+  .preview-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .preview-frame.grain {
+    border-radius: 4px;
+  }
+
+  /* The same grain as the photo tiles: see photos.astro. */
+  .preview-frame.grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: url('/grain.webp') 0 0 / var(--grain-size, 512px) repeat;
+    mix-blend-mode: overlay;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  :global(html:has(#preview[open])) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .preview[open],
+    .preview[open]::backdrop,
+    .preview.closing,
+    .preview.closing::backdrop {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('preview') as HTMLDialogElement | null;
+  const image = document.getElementById('preview-image') as HTMLImageElement | null;
+  const frame = dialog?.querySelector<HTMLElement>('.preview-frame');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let imageWidth = 0;
+  let imageHeight = 0;
+  let cssPixels = false;
+
+  // Fits the preview in 92% of the window, never larger than the image's own
+  // pixels, snapped to whole screen pixels and centered on a pixel boundary.
+  function layout() {
+    if (!dialog || !frame) return;
+    const dpr = window.devicePixelRatio || 1;
+    const width = Math.round(dialog.clientWidth * dpr);
+    const height = Math.round(dialog.clientHeight * dpr);
+    const aspect = imageWidth && imageHeight ? imageWidth / imageHeight : 1;
+    const cap = imageWidth ? imageWidth * (cssPixels ? dpr : 1) : Infinity;
+    const w = Math.floor(Math.min(width * 0.92, height * 0.92 * aspect, cap));
+    const h = Math.round(w / aspect);
+    frame.style.width = `${w / dpr}px`;
+    frame.style.height = `${h / dpr}px`;
+    frame.style.left = `${Math.round((width - w) / 2) / dpr}px`;
+    frame.style.top = `${Math.round((height - h) / 2) / dpr}px`;
+  }
+
+  function open(button: HTMLButtonElement) {
+    if (!dialog || !image || !frame) return;
+    const { full, thumb, alt, width, height, native } = button.dataset;
+    // The page's image shows instantly while the large one loads over it.
+    frame.style.setProperty('--thumb', `url("${thumb}")`);
+    frame.classList.toggle('grain', 'grain' in button.dataset);
+    frame.style.borderRadius = button.dataset.radius ? `${button.dataset.radius}px` : '';
+    imageWidth = Number(width) || 0;
+    imageHeight = Number(height) || 0;
+    cssPixels = native === 'css';
+    image.src = full ?? '';
+    image.alt = alt ?? '';
+    // Drop the stand-in once the large image is there, so it never shows through
+    // transparent edges.
+    if (image.complete) frame.style.removeProperty('--thumb');
+    dialog.classList.remove('closing');
+    dialog.showModal();
+    layout();
+    // Nothing inside is focusable, so focus the dialog itself to receive Escape and Enter.
+    dialog.focus();
+  }
+
+  function close() {
+    if (!dialog?.open || dialog.classList.contains('closing')) return;
+    if (reducedMotion.matches) {
+      dialog.close();
+      return;
+    }
+    dialog.classList.add('closing');
+    // Close when the fade-out ends, or after its duration if the browser skips
+    // the animation (a background tab, say), so the preview can never get stuck.
+    const finish = () => {
+      clearTimeout(fallback);
+      dialog.removeEventListener('animationend', finish);
+      dialog.classList.remove('closing');
+      dialog.close();
+    };
+    const fallback = setTimeout(finish, 200);
+    dialog.addEventListener('animationend', finish);
+  }
+
+  image?.addEventListener('load', () => frame?.style.removeProperty('--thumb'));
+
+  document.querySelectorAll<HTMLButtonElement>('[data-preview]').forEach((button) => {
+    button.addEventListener('click', () => open(button));
+  });
+
+  // A click anywhere, on the image or around it, dismisses the preview. Right
+  // clicks are left alone, so the browser's own menu (Save Image As…) still works.
+  dialog?.addEventListener('click', (event) => {
+    if (event.button !== 0 || event.ctrlKey) return;
+    close();
+  });
+
+  window.addEventListener('resize', () => {
+    if (dialog?.open) layout();
+  });
+
+  dialog?.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    close();
+  });
+
+  dialog?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      close();
+    }
+  });
+</script>

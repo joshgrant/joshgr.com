@@ -1,0 +1,120 @@
+---
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import Preview from '../components/Preview.astro';
+import Base from '../layouts/Base.astro';
+
+interface Graphic {
+  slug: string;
+  caption: string;
+  thumb: string;
+  full: string;
+  width: number;
+  height: number;
+}
+
+// Written by scripts/build-graphics.mjs before every `dev` and `build`.
+let graphics: Graphic[] = [];
+try {
+  graphics = JSON.parse(await readFile(join(process.cwd(), 'public/graphics/manifest.json'), 'utf8'));
+} catch {}
+// Newest (highest number) first.
+graphics.reverse();
+
+// Every graphic covers the same area as a SIDE × SIDE square, whatever its shape.
+// The list is as wide as the widest graphic, and each graphic's width is a share
+// of the list's, so on a narrow screen they all shrink together and stay equal.
+const SIDE = 360;
+const ratios = graphics.map((g) => g.width / g.height);
+const widest = Math.max(1, ...ratios);
+const listWidth = SIDE * Math.sqrt(widest);
+---
+<Base title="Graphics" wide>
+  <h1 class="mb-8 text-[40px] leading-[1.12] font-semibold tracking-[-0.028em]">Graphics</h1>
+  <hr class="mb-8 h-px border-0 bg-hairline" />
+
+  {graphics.length === 0 ? (
+    <p class="text-muted">No graphics yet.</p>
+  ) : (
+    <ul class="mx-auto flex flex-col items-center gap-14" style={`width: min(100%, ${listWidth.toFixed(2)}px)`}>
+      {graphics.map((graphic, i) => (
+        <li style={`width: ${(Math.sqrt(ratios[i] / widest) * 100).toFixed(4)}%`}>
+          <button
+            type="button"
+            class="graphic"
+            style={`aspect-ratio: ${graphic.width} / ${graphic.height}`}
+            data-preview
+            data-native="css"
+            data-radius="32"
+            data-full={graphic.full}
+            data-thumb={graphic.thumb}
+            data-alt={graphic.caption}
+            data-width={graphic.width}
+            data-height={graphic.height}
+            aria-label={`View larger: ${graphic.caption}`}
+          >
+            <span class="graphic-shadow">
+              <img
+                src={graphic.thumb}
+                alt={graphic.caption}
+                width={graphic.width}
+                height={graphic.height}
+                loading={i < 3 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </span>
+          </button>
+          <p class="mt-4 text-center text-sm text-muted">{graphic.caption}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <Preview />
+</Base>
+
+<style>
+  /* Shown uncropped, with no background or grain, since most are transparent. */
+  .graphic {
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* The shadow follows the image's own shape, transparency included. It sits on
+     the parent of the corner clip, so the clip can't cut it off. Safari paints
+     and composites a filter only within its element's box, so the box reaches
+     past the shadow on every side (the padding), without moving the layout (the
+     negative margin) or growing the click target (pointer-events). */
+  .graphic-shadow {
+    display: block;
+    margin: -24px;
+    padding: 24px;
+    filter: drop-shadow(0 4px 8px rgb(0 0 0 / 0.25));
+    pointer-events: none;
+  }
+
+  .graphic img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 32px;
+    pointer-events: auto;
+  }
+
+  @media (hover: hover) {
+    .graphic:hover {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .graphic {
+      transition: none;
+    }
+    .graphic:hover {
+      transform: none;
+    }
+  }
+</style>

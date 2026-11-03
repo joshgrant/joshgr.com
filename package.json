@@ -5,9 +5,10 @@
   "scripts": {
     "models": "node scripts/build-models.mjs",
     "photos": "node scripts/build-photos.mjs",
+    "graphics": "node scripts/build-graphics.mjs",
     "grain": "node scripts/build-grain.mjs",
-    "dev": "npm run models && npm run photos && astro dev",
-    "build": "npm run models && npm run photos && astro build",
+    "dev": "npm run models && npm run photos && npm run graphics && astro dev",
+    "build": "npm run models && npm run photos && npm run graphics && astro build",
     "preview": "astro preview",
     "new": "node scripts/new-post.mjs",
     "deploy": "npm run build && wrangler deploy"

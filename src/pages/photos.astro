@@ -1,6 +1,7 @@
 ---
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import Preview from '../components/Preview.astro';
 import Base from '../layouts/Base.astro';
 
 interface Photo {
@@ -30,10 +31,13 @@ try {
           <button
             type="button"
             class="photo grain"
+            data-preview
+            data-grain
             data-full={photo.full}
             data-thumb={photo.thumb}
             data-alt={photo.alt}
-            data-size={photo.size}
+            data-width={photo.size}
+            data-height={photo.size}
             aria-label={`View larger: ${photo.alt}`}
           >
             <img
@@ -50,11 +54,7 @@ try {
     </ul>
   )}
 
-  <dialog id="preview" class="preview" aria-label="Photo preview" tabindex="-1">
-    <div class="preview-frame grain">
-      <img id="preview-image" alt="" />
-    </div>
-  </dialog>
+  <Preview />
 </Base>
 
 <style>
@@ -122,73 +122,6 @@ try {
     }
   }
 
-  .preview {
-    width: 100vw;
-    max-width: none;
-    height: 100dvh;
-    max-height: none;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    cursor: zoom-out;
-    outline: none;
-  }
-
-  .preview[open] {
-    display: block;
-    animation: fade-in 200ms ease-out;
-  }
-
-  .preview::backdrop {
-    background: rgb(0 0 0 / 0.82);
-  }
-
-  .preview[open]::backdrop {
-    animation: fade-in 220ms ease-out;
-  }
-
-  .preview.closing {
-    animation: fade-out 160ms ease-in forwards;
-  }
-
-  .preview.closing::backdrop {
-    animation: fade-out 160ms ease-in forwards;
-  }
-
-  /* Sized and placed on whole screen pixels by the script below, so the photo
-     and its grain are never resampled. Fades only, for the same reason. */
-  .preview-frame {
-    position: absolute;
-    overflow: hidden;
-    border-radius: 4px;
-    isolation: isolate;
-    background: var(--thumb) center / cover no-repeat;
-  }
-
-  .preview-frame img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  :global(html:has(#preview[open])) {
-    overflow: hidden;
-    scrollbar-gutter: stable;
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-  }
-
-  @keyframes fade-out {
-    to {
-      opacity: 0;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .photo,
     .photo img {
@@ -197,22 +130,10 @@ try {
     .photo:hover {
       transform: none;
     }
-    .preview[open],
-    .preview[open]::backdrop,
-    .preview.closing,
-    .preview.closing::backdrop {
-      animation: none;
-    }
   }
 </style>
 
 <script>
-  const dialog = document.getElementById('preview') as HTMLDialogElement | null;
-  const image = document.getElementById('preview-image') as HTMLImageElement | null;
-  const frame = dialog?.querySelector<HTMLElement>('.preview-frame');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let photoSize = 0;
-
   // One grain pixel per screen pixel. Re-run when the density changes (browser
   // zoom, or moving the window to another display).
   function sizeGrain() {
@@ -221,78 +142,4 @@ try {
     window.matchMedia(`(resolution: ${dpr}dppx)`).addEventListener('change', sizeGrain, { once: true });
   }
   sizeGrain();
-
-  // Fits the preview in 92% of the window, never larger than the photo's own
-  // pixels, snapped to whole screen pixels and centered on a pixel boundary.
-  function layout() {
-    if (!dialog || !frame) return;
-    const dpr = window.devicePixelRatio || 1;
-    const width = Math.round(dialog.clientWidth * dpr);
-    const height = Math.round(dialog.clientHeight * dpr);
-    const side = Math.floor(Math.min(width * 0.92, height * 0.92, photoSize || Infinity));
-    frame.style.width = frame.style.height = `${side / dpr}px`;
-    frame.style.left = `${Math.round((width - side) / 2) / dpr}px`;
-    frame.style.top = `${Math.round((height - side) / 2) / dpr}px`;
-  }
-
-  function open(button: HTMLButtonElement) {
-    if (!dialog || !image || !frame) return;
-    const { full, thumb, alt, size } = button.dataset;
-    // The grid image shows instantly while the large one loads over it.
-    frame.style.setProperty('--thumb', `url("${thumb}")`);
-    photoSize = Number(size) || 0;
-    image.src = full ?? '';
-    image.alt = alt ?? '';
-    dialog.classList.remove('closing');
-    dialog.showModal();
-    layout();
-    // Nothing inside is focusable, so focus the dialog itself to receive Escape and Enter.
-    dialog.focus();
-  }
-
-  function close() {
-    if (!dialog?.open || dialog.classList.contains('closing')) return;
-    if (reducedMotion.matches) {
-      dialog.close();
-      return;
-    }
-    dialog.classList.add('closing');
-    // Close when the fade-out ends, or after its duration if the browser skips
-    // the animation (a background tab, say), so the preview can never get stuck.
-    const finish = () => {
-      clearTimeout(fallback);
-      dialog.removeEventListener('animationend', finish);
-      dialog.classList.remove('closing');
-      dialog.close();
-    };
-    const fallback = setTimeout(finish, 200);
-    dialog.addEventListener('animationend', finish);
-  }
-
-  document.querySelectorAll<HTMLButtonElement>('.photo').forEach((button) => {
-    button.addEventListener('click', () => open(button));
-  });
-
-  // A click anywhere, on the photo or around it, dismisses the preview. Right
-  // clicks are left alone, so the browser's own menu (Save Image As…) still works.
-  dialog?.addEventListener('click', (event) => {
-    if (event.button !== 0 || event.ctrlKey) return;
-    close();
-  });
-
-  window.addEventListener('resize', () => {
-    if (dialog?.open) layout();
-  });
-
-  dialog?.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    close();
-  });
-
-  dialog?.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      close();
-    }
-  });
 </script>
