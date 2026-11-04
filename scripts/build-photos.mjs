@@ -7,10 +7,16 @@
 // 2. Writes a square grid image and a large preview of each photo to
 //    public/photos/, named by a hash of the photo so no file name leaks, and
 //    checks that neither contains any metadata.
-// 3. Writes public/photos/manifest.json, which the Photos page reads.
+// 3. Writes public/photos/manifest.json, which the Photos page reads, newest
+//    photo first.
+//
+// A photo's date is when its file was created, recorded in photos/dates.json the
+// first time the build sees it. The metadata that held the date is scrubbed and
+// Git doesn't keep file dates, so that file is what keeps the order. Edit a date
+// there to move a photo.
 
 import { createHash } from 'node:crypto';
-import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
 import { assertClean, exists, fail, scrub } from './lib/metadata.mjs';
 
@@ -38,11 +44,27 @@ try {
   if (error.code !== 'ENOENT') fail(`photos/captions.json isn't valid JSON: ${error.message}`);
 }
 
+let dates = {};
+try {
+  dates = JSON.parse(await readFile(new URL('dates.json', sourceDir), 'utf8'));
+} catch (error) {
+  if (error.code !== 'ENOENT') fail(`photos/dates.json isn't valid JSON: ${error.message}`);
+}
+const datesBefore = JSON.stringify(dates);
+
 const scrubbed = [];
 const photos = [];
 let built = 0;
 
 for (const original of names) {
+  // Before scrubbing, which may replace the file with a new one.
+  const key = original.replace(/\.[^.]+$/, '');
+  if (!dates[key]) {
+    const { birthtime, mtime } = await stat(new URL(original, sourceDir));
+    // Some file systems don't record a creation time and report 0.
+    dates[key] = (birthtime.getTime() > 0 ? birthtime : mtime).toISOString();
+  }
+
   const { name, note } = await scrub(sourceDir, 'photos', original);
   if (note) scrubbed.push(note);
   const source = new URL(name, sourceDir);
@@ -79,8 +101,9 @@ for (const original of names) {
   await assertClean(new URL(thumb, outDir), `public/photos/${thumb}`, { icc: true });
   await assertClean(new URL(full, outDir), `public/photos/${full}`, { icc: true });
 
-  const key = name.replace(/\.[^.]+$/, '');
   photos.push({
+    key,
+    date: dates[key],
     slug,
     alt: captions[key] ?? captions[name] ?? 'Photo',
     thumb: `/photos/${thumb}`,
@@ -94,7 +117,16 @@ const keep = new Set(['manifest.json', ...photos.flatMap((p) => [p.thumb, p.full
 for (const file of await readdir(outDir)) {
   if (!keep.has(file)) await rm(new URL(file, outDir));
 }
-await writeFile(new URL('manifest.json', outDir), JSON.stringify(photos, null, 2));
+
+// Newest first. Photos from the same moment fall back to name order.
+photos.sort((a, b) => b.date.localeCompare(a.date) || b.key.localeCompare(a.key, undefined, { numeric: true }));
+await writeFile(new URL('manifest.json', outDir), JSON.stringify(photos.map(({ key, ...photo }) => photo), null, 2));
+
+// Only keep dates for photos that are still here, in the page's order.
+dates = Object.fromEntries(photos.map((p) => [p.key, p.date]));
+if (JSON.stringify(dates) !== datesBefore) {
+  await writeFile(new URL('dates.json', sourceDir), `${JSON.stringify(dates, null, 2)}\n`);
+}
 
 for (const note of scrubbed) console.warn(note);
 console.log(
