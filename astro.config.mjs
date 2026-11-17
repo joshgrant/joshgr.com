@@ -9,6 +9,7 @@ export default defineConfig({
   // Old addresses that moved, so existing links keep working.
   redirects: {
     '/projects': '/software/',
+    '/graphics': '/designs/',
   },
   vite: {
     plugins: [tailwindcss()],

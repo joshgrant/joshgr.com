@@ -20,7 +20,7 @@ export const site = {
     { label: 'Software', href: '/software/' },
     { label: 'Photos', href: '/photos/' },
     { label: 'Music', href: '/music/' },
-    { label: 'Graphics', href: '/graphics/' },
+    { label: 'Designs', href: '/designs/' },
   ],
 
   // Shown under "Elsewhere" in the side menu. Add, remove or reorder freely.
