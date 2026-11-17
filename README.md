@@ -48,7 +48,7 @@ You can also just create the `.md` file yourself, in any editor.
 
 Every Markdown style is supported and styled, including headings, bold and italics, links, lists, quotes, inline code and code blocks, tables, task lists (`- [x]`), footnotes (`[^1]`) and horizontal rules. The sample post, `how-wizardly-words-invents-words.md`, uses all of them.
 
-For images, put the file in `public/images/` and reference it as `![Description of the image](/images/photo.jpg)`.
+For images, put the file in `src/assets/` and reference it relative to the post: `![Description of the image](../../assets/photo.png)`. Astro compresses it to WebP at build time and sets its width and height. Don't use `public/` for post images: files there are served as-is, uncompressed.
 
 ## Software
 

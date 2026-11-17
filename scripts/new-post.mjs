@@ -28,6 +28,7 @@ const body = `---
 title: ${JSON.stringify(title)}
 date: ${today}
 description: ""
+# hero: ../../assets/your-image.png # optional image above the post and in lists
 draft: true # delete this line (or set it to false) to publish
 ---
 
