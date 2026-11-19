@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const updated = new Date('2026-11-19T12:00:00Z');
+const contact = 'joshgrant+seedling@pm.me';
+---
+<Base title="Seedling Privacy Policy" description="How Seedling, the daily planner for iPhone and iPad, handles your data.">
+  <article>
+    <p class="mb-3 text-[15px] text-muted tabular-nums">
+      Last updated <time datetime={updated.toISOString().slice(0, 10)}>November 19, 2026</time>
+    </p>
+    <h1 class="mb-8 text-[40px] leading-[1.12] font-semibold tracking-[-0.028em] text-balance">Seedling Privacy Policy</h1>
+    <div class="prose">
+      <p>
+        Seedling doesn’t collect your data. There are no accounts, ads, analytics or trackers, and I don’t run a
+        server. What you write in Seedling stays on your devices and in your own iCloud.
+      </p>
+
+      <h2>What Seedling stores</h2>
+      <p>
+        Seedling stores your tasks, schedule, meals, notes, water, focus sessions and settings on your device.
+        Widgets read the same data to show it on your Home Screen and Lock Screen.
+      </p>
+
+      <h2>iCloud</h2>
+      <p>
+        If you’re signed in to iCloud, Seedling syncs your data through your private iCloud database so it shows up
+        on your other devices. Apple stores it, and I can’t see it. If iCloud isn’t available, your data stays on the
+        device.
+      </p>
+
+      <h2>Apple Health</h2>
+      <p>
+        If you allow it, Seedling saves the water you log to Health. It also reads water from Health so your daily
+        total includes water logged in other apps. Seedling asks the first time you log water.
+      </p>
+      <p>
+        Water read from Health is only shown to you: Seedling never stores it, syncs it, shares it or uses it for
+        advertising. You can change access at any time in the Health app or in Settings.
+      </p>
+
+      <h2>Purchases</h2>
+      <p>
+        Apple handles the Unlock Seedling purchase through the App Store. I never see your payment details. Seedling
+        checks your purchase on your device.
+      </p>
+
+      <h2>Feedback</h2>
+      <p>
+        When you choose to send feedback, Seedling starts an email to me, and nothing is sent until you send it. If
+        you use Apple Mail, the draft already includes the Seedling version, your device type (such as “iPhone”) and
+        your iOS version, and you can see and edit all of it before sending. Other email apps start with just a
+        subject line.
+      </p>
+      <p>I use your email address and message only to reply and to improve Seedling, and I never share them.</p>
+
+      <h2>Notifications and alarms</h2>
+      <p>
+        Seedling uses local notifications only to update the app icon badge. It uses alarms only to tell you when a
+        focus session or break ends. Both are created on your device, and nothing is sent to me.
+      </p>
+
+      <h2>Upgrading from Seedling 1</h2>
+      <p>When you update, Seedling copies your existing data into the new version on your device.</p>
+
+      <h2>Your data, your choice</h2>
+      <ul>
+        <li>Export everything from Seedling’s Settings.</li>
+        <li>Delete entries in the app, or delete the app to remove its data from that device.</li>
+        <li>Delete the iCloud copy in Settings › [your name] › iCloud by managing your storage.</li>
+        <li>Delete water saved to Health in the Health app.</li>
+      </ul>
+
+      <h2>Children</h2>
+      <p>Seedling doesn’t collect personal information from anyone, children included.</p>
+
+      <h2>Changes</h2>
+      <p>If this policy changes, I’ll update this page and the date at the top.</p>
+
+      <h2>Contact</h2>
+      <p>Questions? Email <a href={`mailto:${contact}`}>{contact}</a>.</p>
+    </div>
+  </article>
+</Base>
