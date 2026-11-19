@@ -34,30 +34,36 @@ export const site = {
 
   // Your projects. `featured: true` puts one on the homepage.
   // `href` can be a page on this site ("/wizardly-words/") or any URL.
+  // `icon` names an image in designs/app_icons/, without its number or extension:
+  // 'Seedling' is designs/app_icons/5_Seedling.png. It's shown beside the project.
   projects: [
+    {
+      name: 'Seedling',
+      description: 'Daily planner for iOS',
+      href: 'https://apps.apple.com/us/app/seedling-daily-planner/id1516093618',
+      icon: 'Seedling',
+      featured: true
+    },
     {
       name: 'The Morning App',
       description: 'The transition from sleep to wakefulness is the most powerful moment of your day. How do you leverage it?',
       href: 'https://themorning.app',
+      icon: 'TheMorningApp',
       featured: true
     },
     {
       name: 'Wizardly Words',
       description: 'If language is how we see the world, what happens when we invent new words?',
       href: '/wizardly-words/',
+      icon: 'WizardlyWords',
       featured: true,
     },
     {
       name: 'MusicX',
       description: 'What does the musical desert look like?',
       href: 'https://github.com/joshgrant/MusicX',
+      icon: 'MusicX',
       featured: true,
-    },
-    {
-      name: 'Seedling',
-      description: 'Daily planner for iOS',
-      href: 'https://apps.apple.com/us/app/seedling-daily-planner/id1516093618',
-      featured: true
     }
   ],
 

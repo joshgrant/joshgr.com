@@ -1,21 +1,67 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
 interface Project {
   name: string;
   description: string;
   href: string;
+  icon?: string;
 }
 interface Props {
   projects: Project[];
 }
 const { projects } = Astro.props;
+
+// designs/app_icons/5_Seedling.png is the icon named 'Seedling'.
+const files = import.meta.glob<ImageMetadata>('../../designs/app_icons/*.{png,jpg,jpeg,webp,avif}', {
+  eager: true,
+  import: 'default',
+});
+const iconsByName = new Map(
+  Object.entries(files).map(([path, image]) => [
+    path.split('/').pop()!.replace(/\.[^.]+$/, '').replace(/^\d+_/, ''),
+    image,
+  ]),
+);
+
+function iconFor(project: Project) {
+  if (!project.icon) return undefined;
+  const image = iconsByName.get(project.icon);
+  if (!image) {
+    throw new Error(
+      `No icon named "${project.icon}" for ${project.name} in designs/app_icons/. ` +
+        `Found: ${[...iconsByName.keys()].join(', ')}.`,
+    );
+  }
+  return image;
+}
 ---
 <ul class="flex flex-col">
-  {projects.map((project) => (
-    <li class="border-t border-hairline last:border-b">
-      <a href={project.href} class="group flex flex-col gap-0.5 py-3.5 text-black">
-        <span class="font-medium transition-colors group-hover:text-tint">{project.name}</span>
-        <span class="text-muted">{project.description}</span>
-      </a>
-    </li>
-  ))}
+  {projects.map((project) => {
+    const icon = iconFor(project);
+    return (
+      <li class="border-t border-hairline last:border-b">
+        <a href={project.href} class="group flex items-center gap-2 py-3.5 text-black">
+          {icon && (
+            // As tall as a one-line title and description together: two lines plus
+            // the 2px gap between them (gap-0.5). Longer text wraps without growing it,
+            // and the icon stays centered beside it.
+            <Image
+              src={icon}
+              alt=""
+              width={120}
+              height={120}
+              fit="cover"
+              class="size-[calc(2lh+0.125rem)] shrink-0 rounded-[4px] object-cover"
+            />
+          )}
+          <span class="flex min-w-0 flex-col gap-0.5">
+            <span class="font-medium transition-colors group-hover:text-tint">{project.name}</span>
+            <span class="text-muted">{project.description}</span>
+          </span>
+        </a>
+      </li>
+    );
+  })}
 </ul>

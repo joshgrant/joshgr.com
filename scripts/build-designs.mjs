@@ -12,7 +12,7 @@
 // Within a section, designs whose file name starts with a number come first,
 // highest number first, then the rest alphabetically.
 // Captions come from designs/captions.json, keyed by "folder/name" or just the
-// file name, with or without the extension, or else from the file name:
+// file name, with or without the extension or its leading number, or else from the file name:
 // "6_WattCheck.png" is "Watt Check".
 
 import { createHash } from 'node:crypto';
@@ -107,11 +107,14 @@ for (const folder of folders) {
     outputs.add(thumb).add(full);
 
     const key = name.replace(/\.[^.]+$/, '');
+    // "3_MusicX" can also be captioned as "MusicX", so renumbering keeps its caption.
+    const bare = key.replace(/^\d+[_\-\s]*/, '');
     items.push({
       slug,
       key,
       caption:
-        captions[`${folder}/${key}`] ?? captions[`${folder}/${name}`] ?? captions[key] ?? captions[name] ?? captionFrom(key),
+        captions[`${folder}/${key}`] ?? captions[`${folder}/${name}`] ?? captions[key] ?? captions[name] ??
+        captions[`${folder}/${bare}`] ?? captions[bare] ?? captionFrom(key),
       thumb: `/designs/${thumb}`,
       full: `/designs/${full}`,
       width,
